@@ -52,32 +52,35 @@ export default {
     data() {
         return {
             items: [],
-            fields: ['date', 'category', 'description', 'hours'],
-            categories: ['Projects', 'Lean', 'Professional Development', 'User Specific', 'Communication & Perf. Mgmt.', 'Overhead'],
-            category: 'Projects',
+            fields: ['date', 'category', 'subcategory', 'description', 'hours'],
+            categories: [],
+            category: '',
             subCategories: [],
             subCategory: '',
         }
     },
     methods: {
         getTimeEntries() {
-            this.tableData = [];
-            return timeEntries
-                    .where("userId", "==", firebaseAuth().currentUser.uid)
-                    .orderBy("date", "desc")
-                    .get()
-                    .then(querySnapshot => {
-                        querySnapshot.forEach(doc => {
-                            this.items.push(doc.data());
-                        });
-                    })
-                    .catch(error => {
-                        console.log("Error getting documents: ", error);
+            const items = []
+            timeEntries
+                .where("uid", "==", firebaseAuth().currentUser.uid)
+                .orderBy("date", "desc")
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        items.push(doc.data());
                     });
+                })
+                .catch(error => {
+                    console.log("Error getting documents: ", error);
+                });
+            return items
         }
     },
-    created () {
-        this.getTimeEntries();
+    computed: {
+        getTimeEntries: () => {
+            this.items = this.getTimeEntries();
+        }
     }
 }
 </script>

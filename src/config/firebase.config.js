@@ -2,7 +2,7 @@ import firebase from 'firebase';
 
 
 const config = {
-    
+    // Firebase Config Here
 };
 
 firebase.initializeApp(config);
